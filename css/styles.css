@@ -776,6 +776,10 @@ img {
   color: var(--color-mute-dark);
   transition: border-color 0.2s ease;
   overflow: hidden;
+  max-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .settings-upload-area:hover {
