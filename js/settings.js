@@ -274,15 +274,6 @@ const SettingsPage = (() => {
       } else if (target.classList.contains('rule-action-delete')) {
         _handleDeleteRule(container, target.getAttribute('data-id'));
       }
-
-      // Reward history delete
-      var historyBtn = target.closest('.rule-action-delete-history');
-      if (historyBtn) {
-        var index = parseInt(historyBtn.getAttribute('data-index'), 10);
-        if (!confirm('确定删除此奖励记录？')) return;
-        Storage.deleteRewardRecord(index);
-        _refreshRewardHistoryList(container);
-      }
     });
   }
 
@@ -492,9 +483,6 @@ const SettingsPage = (() => {
         + '<div class="rule-item-days" style="font-size:var(--text-caption);color:var(--color-mute-dark);">' + record.achievedAt + '</div>'
         + '<div class="rule-item-reward" style="font-size:var(--text-body);color:var(--color-on-dark);">累计 ' + record.days + ' 天 · ' + record.reward + '</div>'
         + '</div>'
-        + '</div>'
-        + '<div class="rule-item-actions">'
-        + '<button class="rule-action-btn rule-action-delete-history" data-index="' + i + '">删除</button>'
         + '</div>'
         + '</div>';
     }

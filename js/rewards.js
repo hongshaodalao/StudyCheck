@@ -11,7 +11,11 @@ const Rewards = (() => {
     const history = Storage.getRewardHistory();
     const newRewards = [];
 
+    var todayStr = _today();
+    var todayHasReward = history.some(function (h) { return h.achievedAt === todayStr; });
+
     for (const rule of rules) {
+      if (todayHasReward) break; // 当天已有奖励，不再添加
       if (completedDays >= rule.days) {
         var rewardKey = rule.days + ':' + rule.reward;
         const alreadyAchieved = history.some(h =>
