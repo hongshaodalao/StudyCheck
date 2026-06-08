@@ -414,6 +414,17 @@ const SettingsPage = (() => {
       return;
     }
 
+    // 检查是否已存在相同天数的规则
+    var existingRules = Storage.getRewardRules();
+    var duplicate = existingRules.find(function (r) {
+      return r.days === days && r.id !== editingRuleId;
+    });
+    if (duplicate) {
+      alert('已存在累计 ' + days + ' 天的奖励规则，无法重复添加');
+      daysInput.focus();
+      return;
+    }
+
     var hasImage = uploadArea.getAttribute('data-has-image') === 'true';
     var image = hasImage ? (uploadArea.getAttribute('data-image') || null) : null;
 
