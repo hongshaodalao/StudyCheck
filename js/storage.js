@@ -122,6 +122,16 @@ const Storage = (() => {
     _set('rewardHistory', history);
   }
 
+  function deleteRewardRecord(index) {
+    const history = getRewardHistory();
+    if (index >= 0 && index < history.length) {
+      history.splice(index, 1);
+      _set('rewardHistory', history);
+      return true;
+    }
+    return false;
+  }
+
   function getRewardAtDate(date) {
     const history = getRewardHistory();
     for (let i = 0; i < history.length; i++) {
@@ -170,6 +180,7 @@ const Storage = (() => {
     deleteRewardRule: deleteRewardRule,
     getRewardHistory: getRewardHistory,
     addRewardRecord: addRewardRecord,
+    deleteRewardRecord: deleteRewardRecord,
     getRewardAtDate: getRewardAtDate,
     getPassword: getPassword,
     verifyPassword: verifyPassword,

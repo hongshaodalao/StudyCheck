@@ -143,6 +143,16 @@ const SettingsPage = (() => {
         </div>
       </div>
 
+      <!-- 奖励记录 -->
+      <div class="settings-section">
+        <div class="settings-section-header">
+          <h3>📋 奖励记录</h3>
+        </div>
+        <div id="rewardHistoryList">
+          ${_renderRewardHistoryList()}
+        </div>
+      </div>
+
       <!-- 数据管理 -->
       <div class="settings-section">
         <div class="settings-section-header">
@@ -257,6 +267,9 @@ const SettingsPage = (() => {
         _handleClearAll(container);
       });
     }
+
+    // Reward history delete buttons
+    _bindHistoryDeleteEvents(container);
   }
 
   // ==================== Password Change ====================
@@ -448,6 +461,55 @@ const SettingsPage = (() => {
     _refreshRuleList(container);
   }
 
+  // ==================== Reward History ====================
+
+  function _renderRewardHistoryList() {
+    var history = Storage.getRewardHistory();
+    if (history.length === 0) {
+      return '<div style="text-align:center;color:var(--color-mute-dark);padding:var(--spacing-md);font-size:var(--text-caption);">暂无奖励记录</div>';
+    }
+    var html = '';
+    for (var i = 0; i < history.length; i++) {
+      var record = history[i];
+      var thumbHtml = record.image && record.image.length > 10
+        ? '<img src="' + record.image + '" class="rule-item-thumb">'
+        : '<div class="rule-item-thumb rule-item-thumb-default">🏆</div>';
+      html += '<div class="rule-item">'
+        + '<div class="rule-item-info">'
+        + thumbHtml
+        + '<div>'
+        + '<div class="rule-item-days" style="font-size:var(--text-caption);color:var(--color-mute-dark);">' + record.achievedAt + '</div>'
+        + '<div class="rule-item-reward" style="font-size:var(--text-body);color:var(--color-on-dark);">累计 ' + record.days + ' 天 · ' + record.reward + '</div>'
+        + '</div>'
+        + '</div>'
+        + '<div class="rule-item-actions">'
+        + '<button class="rule-action-btn rule-action-delete-history" data-index="' + i + '">删除</button>'
+        + '</div>'
+        + '</div>';
+    }
+    return html;
+  }
+
+  function _refreshRewardHistoryList(container) {
+    var listContainer = container.querySelector('#rewardHistoryList');
+    if (listContainer) {
+      listContainer.innerHTML = _renderRewardHistoryList();
+      _bindHistoryDeleteEvents(container);
+    }
+  }
+
+  function _bindHistoryDeleteEvents(container) {
+    var btns = container.querySelectorAll('.rule-action-delete-history');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function () {
+        var index = parseInt(this.getAttribute('data-index'), 10);
+        if (!confirm('确定删除此奖励记录？')) return;
+        Storage.deleteRewardRecord(index);
+        _refreshRewardHistoryList(container);
+      });
+    }
+  }
+
   // ==================== Clear All ====================
 
   function _handleClearAll(container) {
@@ -455,6 +517,7 @@ const SettingsPage = (() => {
     Storage.clearAllRecords();
     alert('所有记录已清除');
     _refreshRuleList(container);
+    _refreshRewardHistoryList(container);
   }
 
   // ==================== Refresh Rule List ====================

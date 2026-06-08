@@ -118,6 +118,7 @@ const CalendarPage = (() => {
   function _calcFutureRewardDates(totalCompleted, todayStr) {
     var rules = Storage.getRewardRules().sort(function (a, b) { return a.days - b.days; });
     var history = Storage.getRewardHistory();
+    var todayComplete = Storage.isDayComplete(todayStr);
     var result = {};
 
     for (var i = 0; i < rules.length; i++) {
@@ -128,13 +129,19 @@ const CalendarPage = (() => {
       });
       if (achieved) continue;
 
-      // 计算还需要多少天
+      // 如果今天已完成，算上今天；否则不算今天
+      var effectiveCompleted = todayComplete ? totalCompleted : totalCompleted;
+      // 还需要多少天（含今天如果未完成）
       var remaining = rule.days - totalCompleted;
       if (remaining <= 0) continue;
 
-      // 目标日期 = 今天 + remaining 天
+      // 如果今天还没打卡，今天也算一天（今天打卡就能完成）
+      // 所以目标日期 = 今天 + (remaining - 1) 天
+      var daysFromToday = todayComplete ? remaining : remaining - 1;
+      if (daysFromToday < 0) daysFromToday = 0;
+
       var targetDate = new Date(todayStr + 'T00:00:00');
-      targetDate.setDate(targetDate.getDate() + remaining);
+      targetDate.setDate(targetDate.getDate() + daysFromToday);
       var dateStr = targetDate.getFullYear() + '-' +
         String(targetDate.getMonth() + 1).padStart(2, '0') + '-' +
         String(targetDate.getDate()).padStart(2, '0');
