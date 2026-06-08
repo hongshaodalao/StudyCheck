@@ -123,20 +123,18 @@ const SettingsPage = (() => {
         </div>
         <div class="settings-form-group">
           <label class="input-label">奖励图片（可选）</label>
-          <div class="settings-upload-area" id="uploadArea">
-            <div style="font-size:32px;margin-bottom:var(--spacing-xs);">🖼️</div>
-            <div>点击上传图片</div>
-            <div style="font-size:var(--text-small);color:var(--color-mute-dark);margin-top:var(--spacing-xs);">支持 JPG、PNG，自动压缩至 300×300</div>
+          <div class="settings-upload-area" id="uploadArea" data-has-image="false">
+            <div id="uploadPlaceholder">
+              <div style="font-size:32px;margin-bottom:var(--spacing-xs);">🖼️</div>
+              <div>点击上传图片</div>
+              <div style="font-size:var(--text-small);color:var(--color-mute-dark);margin-top:var(--spacing-xs);">支持 JPG、PNG，自动压缩至 300×300</div>
+            </div>
+            <div id="uploadImagePreview" style="display:none;position:relative;">
+              <img id="previewImg" style="width:100%;max-height:180px;object-fit:cover;border-radius:var(--radius-sm);">
+              <button class="btn btn-sm btn-secondary" id="removeImage" style="position:absolute;top:8px;right:8px;">移除</button>
+            </div>
           </div>
           <input type="file" id="ruleImageInput" accept="image/*" style="display:none">
-          <div class="settings-image-preview hidden" id="imagePreview">
-            <img id="previewImg" class="settings-preview-img" style="width:60px;height:60px;object-fit:cover;border-radius:var(--radius-sm);">
-            <div style="flex:1;min-width:0;">
-              <div id="previewName" style="font-size:var(--text-small);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
-              <div id="previewSize" style="font-size:var(--text-small);color:var(--color-mute-dark);"></div>
-            </div>
-            <button class="btn btn-sm btn-secondary" id="removeImage">移除</button>
-          </div>
         </div>
         <div style="display:flex;gap:var(--spacing-sm);margin-top:var(--spacing-md);">
           <button class="btn btn-primary" style="flex:1;" id="saveRuleBtn">保存</button>
@@ -336,7 +334,7 @@ const SettingsPage = (() => {
       daysInput.value = rule.days;
       rewardInput.value = rule.reward;
       if (rule.image) {
-        _showImagePreview(container, rule.image, '已上传图片', '');
+        _showImagePreview(container, rule.image);
       } else {
         _removeImagePreview(container);
       }
@@ -366,8 +364,7 @@ const SettingsPage = (() => {
     if (!file) return;
 
     ImageUtil.compress(file).then(function (base64) {
-      var sizeStr = ImageUtil.formatSize(base64);
-      _showImagePreview(container, base64, file.name, sizeStr);
+      _showImagePreview(container, base64);
     }).catch(function (err) {
       alert('图片处理失败：' + err.message);
     });
@@ -376,33 +373,30 @@ const SettingsPage = (() => {
     fileInput.value = '';
   }
 
-  function _showImagePreview(container, base64, name, sizeStr) {
-    var previewEl = container.querySelector('#imagePreview');
-    var previewImg = container.querySelector('#previewImg');
-    var previewName = container.querySelector('#previewName');
-    var previewSize = container.querySelector('#previewSize');
+  function _showImagePreview(container, base64) {
     var uploadArea = container.querySelector('#uploadArea');
+    var placeholder = container.querySelector('#uploadPlaceholder');
+    var preview = container.querySelector('#uploadImagePreview');
+    var previewImg = container.querySelector('#previewImg');
 
+    placeholder.style.display = 'none';
+    preview.style.display = 'block';
     previewImg.src = base64;
-    previewName.textContent = name;
-    previewSize.textContent = sizeStr;
-    previewEl.classList.remove('hidden');
-    uploadArea.classList.add('hidden');
-
-    // Store the base64 on the preview element for retrieval
-    previewEl.setAttribute('data-image', base64);
+    uploadArea.setAttribute('data-has-image', 'true');
+    uploadArea.setAttribute('data-image', base64);
   }
 
   function _removeImagePreview(container) {
-    var previewEl = container.querySelector('#imagePreview');
     var uploadArea = container.querySelector('#uploadArea');
+    var placeholder = container.querySelector('#uploadPlaceholder');
+    var preview = container.querySelector('#uploadImagePreview');
+    var previewImg = container.querySelector('#previewImg');
 
-    previewEl.classList.add('hidden');
-    previewEl.removeAttribute('data-image');
-    uploadArea.classList.remove('hidden');
-    container.querySelector('#previewImg').src = '';
-    container.querySelector('#previewName').textContent = '';
-    container.querySelector('#previewSize').textContent = '';
+    placeholder.style.display = '';
+    preview.style.display = 'none';
+    previewImg.src = '';
+    uploadArea.setAttribute('data-has-image', 'false');
+    uploadArea.removeAttribute('data-image');
   }
 
   // ==================== Save Rule ====================
@@ -410,7 +404,7 @@ const SettingsPage = (() => {
   function _handleSaveRule(container) {
     var daysInput = container.querySelector('#ruleDaysInput');
     var rewardInput = container.querySelector('#ruleRewardInput');
-    var previewEl = container.querySelector('#imagePreview');
+    var uploadArea = container.querySelector('#uploadArea');
 
     var days = parseInt(daysInput.value, 10);
     var reward = rewardInput.value.trim();
@@ -426,7 +420,8 @@ const SettingsPage = (() => {
       return;
     }
 
-    var image = previewEl.classList.contains('hidden') ? null : (previewEl.getAttribute('data-image') || null);
+    var hasImage = uploadArea.getAttribute('data-has-image') === 'true';
+    var image = hasImage ? (uploadArea.getAttribute('data-image') || null) : null;
 
     if (editingRuleId) {
       Storage.updateRewardRule(editingRuleId, {
