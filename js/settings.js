@@ -10,6 +10,7 @@ const SettingsPage = (() => {
     } else {
       container.innerHTML = _renderSettingsPanel();
       _bindSettingsEvents(container);
+      _bindContainerDelegation(container);
     }
   }
 
@@ -212,18 +213,6 @@ const SettingsPage = (() => {
       });
     }
 
-    // Edit / Delete rule buttons
-    container.addEventListener('click', function (e) {
-      var target = e.target;
-      if (target.classList.contains('rule-action-edit')) {
-        var ruleId = target.getAttribute('data-id');
-        _handleEditRule(container, ruleId);
-      } else if (target.classList.contains('rule-action-delete')) {
-        var ruleId2 = target.getAttribute('data-id');
-        _handleDeleteRule(container, ruleId2);
-      }
-    });
-
     // Upload area click
     var uploadArea = container.querySelector('#uploadArea');
     var fileInput = container.querySelector('#ruleImageInput');
@@ -268,8 +257,32 @@ const SettingsPage = (() => {
       });
     }
 
-    // Reward history delete buttons
-    _bindHistoryDeleteEvents(container);
+  }
+
+  // Container-level event delegation (only bind once)
+  function _bindContainerDelegation(container) {
+    if (container._delegated) return;
+    container._delegated = true;
+
+    container.addEventListener('click', function (e) {
+      var target = e.target;
+
+      // Rule edit/delete
+      if (target.classList.contains('rule-action-edit')) {
+        _handleEditRule(container, target.getAttribute('data-id'));
+      } else if (target.classList.contains('rule-action-delete')) {
+        _handleDeleteRule(container, target.getAttribute('data-id'));
+      }
+
+      // Reward history delete
+      var historyBtn = target.closest('.rule-action-delete-history');
+      if (historyBtn) {
+        var index = parseInt(historyBtn.getAttribute('data-index'), 10);
+        if (!confirm('确定删除此奖励记录？')) return;
+        Storage.deleteRewardRecord(index);
+        _refreshRewardHistoryList(container);
+      }
+    });
   }
 
   // ==================== Password Change ====================
@@ -497,21 +510,6 @@ const SettingsPage = (() => {
     }
   }
 
-  function _bindHistoryDeleteEvents(container) {
-    // 使用事件委托，只绑定一次
-    var listEl = container.querySelector('#rewardHistoryList');
-    if (listEl && !listEl._delegated) {
-      listEl._delegated = true;
-      listEl.addEventListener('click', function (e) {
-        var btn = e.target.closest('.rule-action-delete-history');
-        if (!btn) return;
-        var index = parseInt(btn.getAttribute('data-index'), 10);
-        if (!confirm('确定删除此奖励记录？')) return;
-        Storage.deleteRewardRecord(index);
-        _refreshRewardHistoryList(container);
-      });
-    }
-  }
 
   // ==================== Clear All ====================
 
