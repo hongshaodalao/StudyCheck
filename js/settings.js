@@ -494,15 +494,18 @@ const SettingsPage = (() => {
     var listContainer = container.querySelector('#rewardHistoryList');
     if (listContainer) {
       listContainer.innerHTML = _renderRewardHistoryList();
-      _bindHistoryDeleteEvents(container);
     }
   }
 
   function _bindHistoryDeleteEvents(container) {
-    var btns = container.querySelectorAll('.rule-action-delete-history');
-    for (var i = 0; i < btns.length; i++) {
-      btns[i].addEventListener('click', function () {
-        var index = parseInt(this.getAttribute('data-index'), 10);
+    // 使用事件委托，只绑定一次
+    var listEl = container.querySelector('#rewardHistoryList');
+    if (listEl && !listEl._delegated) {
+      listEl._delegated = true;
+      listEl.addEventListener('click', function (e) {
+        var btn = e.target.closest('.rule-action-delete-history');
+        if (!btn) return;
+        var index = parseInt(btn.getAttribute('data-index'), 10);
         if (!confirm('确定删除此奖励记录？')) return;
         Storage.deleteRewardRecord(index);
         _refreshRewardHistoryList(container);
