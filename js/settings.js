@@ -127,7 +127,7 @@ const SettingsPage = (() => {
             <div id="uploadPlaceholder">
               <div style="font-size:32px;margin-bottom:var(--spacing-xs);">🖼️</div>
               <div>点击上传图片</div>
-              <div style="font-size:var(--text-small);color:var(--color-mute-dark);margin-top:var(--spacing-xs);">支持 JPG、PNG，自动压缩至 300×300</div>
+              <div style="font-size:var(--text-small);color:var(--color-mute-dark);margin-top:var(--spacing-xs);">支持 JPG、PNG，自动压缩至 400×400</div>
             </div>
             <div id="uploadImagePreview" style="display:none;position:relative;">
               <img id="previewImg" style="width:100%;max-height:180px;object-fit:cover;border-radius:var(--radius-sm);">

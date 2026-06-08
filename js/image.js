@@ -1,6 +1,6 @@
 const ImageUtil = (() => {
-  const MAX_SIZE = 300;
-  const QUALITY = 0.7;
+  const MAX_SIZE = 400;
+  const QUALITY = 0.85;
 
   /**
    * 压缩图片文件为 base64
