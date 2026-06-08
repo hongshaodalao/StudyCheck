@@ -216,7 +216,9 @@ const SettingsPage = (() => {
     var fileInput = container.querySelector('#ruleImageInput');
     if (uploadArea && fileInput) {
       uploadArea.addEventListener('click', function () {
-        fileInput.click();
+        if (uploadArea.getAttribute('data-has-image') !== 'true') {
+          fileInput.click();
+        }
       });
       fileInput.addEventListener('change', function () {
         _handleImageUpload(container, fileInput);
@@ -226,7 +228,8 @@ const SettingsPage = (() => {
     // Remove image
     var removeBtn = container.querySelector('#removeImage');
     if (removeBtn) {
-      removeBtn.addEventListener('click', function () {
+      removeBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
         _removeImagePreview(container);
       });
     }

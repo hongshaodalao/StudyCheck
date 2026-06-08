@@ -774,10 +774,16 @@ img {
   cursor: pointer;
   color: var(--color-mute-dark);
   transition: border-color 0.2s ease;
+  overflow: hidden;
 }
 
 .settings-upload-area:hover {
   border-color: var(--color-primary);
+}
+
+.settings-upload-area[data-has-image="true"] {
+  padding: 0;
+  border-style: solid;
 }
 
 .settings-image-preview {
