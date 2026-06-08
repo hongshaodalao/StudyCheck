@@ -384,6 +384,7 @@ img {
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: var(--spacing-sm);
   padding: var(--spacing-md) 0;
   border-bottom: 1px solid var(--color-hairline-dark);
   cursor: pointer;
@@ -404,14 +405,15 @@ img {
 }
 
 .checkin-checkbox {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 1px solid var(--color-hairline-dark);
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--color-hairline-dark);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  margin-left: auto;
   margin-right: var(--spacing-md);
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
@@ -508,14 +510,16 @@ img {
 }
 
 .calendar-day {
-  aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-full);
-  font-size: var(--text-caption);
+  font-size: var(--text-small);
   color: var(--color-on-dark);
   transition: background-color 0.2s ease;
+  width: 32px;
+  height: 32px;
+  margin: 2px auto;
 }
 
 .calendar-day-empty {

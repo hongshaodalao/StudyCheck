@@ -159,9 +159,12 @@ const SettingsPage = (() => {
   // ==================== Rule Item HTML ====================
 
   function _renderRuleItem(rule) {
-    var thumbHtml = rule.image
-      ? '<img src="' + rule.image + '" class="rule-item-thumb">'
-      : '<div class="rule-item-icon" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--color-gold-start),var(--color-gold-end));border-radius:6px;flex-shrink:0;font-size:18px;">🏆</div>';
+    var thumbHtml = '';
+    if (rule.image && rule.image.length > 10) {
+      thumbHtml = '<img src="' + rule.image + '" class="rule-item-thumb">';
+    } else {
+      thumbHtml = '<div class="rule-item-icon">🏆</div>';
+    }
 
     return `
       <div class="rule-item" data-rule-id="${rule.id}">
