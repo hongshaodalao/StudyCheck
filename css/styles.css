@@ -337,7 +337,8 @@ img {
 .modal {
   background-color: var(--color-surface-card);
   border-radius: var(--radius-md);
-  max-width: 400px;
+  max-width: 480px;
+  width: 90%;
   max-height: 90vh;
   overflow-y: auto;
   padding: var(--spacing-lg);
@@ -506,9 +507,7 @@ img {
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
-  max-width: 320px;
-  margin: 0 auto;
+  gap: var(--spacing-xxs);
 }
 
 .calendar-day {
@@ -516,12 +515,10 @@ img {
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-full);
-  font-size: var(--text-small);
+  font-size: var(--text-caption);
   color: var(--color-on-dark);
   transition: background-color 0.2s ease;
-  width: 28px;
-  height: 28px;
-  margin: 2px auto;
+  aspect-ratio: 1;
 }
 
 .calendar-day-empty {
@@ -538,15 +535,35 @@ img {
   color: var(--color-canvas-dark);
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(255, 206, 33, 0.3);
+  position: relative;
 }
 
 .calendar-day-reward:hover {
   opacity: 0.9;
 }
 
+.calendar-day-reward-target {
+  border: 2px solid var(--color-gold-start);
+  color: var(--color-gold-start);
+  cursor: pointer;
+  position: relative;
+}
+
+.calendar-day-reward-target:hover {
+  background-color: rgba(255, 206, 33, 0.1);
+}
+
 .calendar-day-today {
   outline: 2px solid var(--color-primary);
   outline-offset: -2px;
+}
+
+.calendar-reward-icon {
+  font-size: 8px;
+  position: absolute;
+  top: 0;
+  right: 2px;
+  line-height: 1;
 }
 
 .calendar-legend {

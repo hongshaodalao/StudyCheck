@@ -153,6 +153,7 @@ const Storage = (() => {
   function clearAllRecords() {
     _set('checkins', {});
     _set('rewardHistory', []);
+    _set('rewardRules', []);
   }
 
   return {

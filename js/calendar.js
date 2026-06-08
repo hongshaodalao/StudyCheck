@@ -27,6 +27,9 @@ const CalendarPage = (() => {
       gridHtml += '<span class="calendar-day calendar-day-empty"></span>';
     }
 
+    // 计算未来奖励目标日期
+    var futureRewardDates = _calcFutureRewardDates(totalCompleted, todayStr);
+
     // Day cells
     for (let day = 1; day <= daysInMonth; day++) {
       const dateStr = currentYear + '-' +
@@ -35,12 +38,19 @@ const CalendarPage = (() => {
 
       let classes = 'calendar-day';
       let rewardIcon = '';
+      let dataAttr = '';
 
-      // Check reward first (takes priority over complete styling)
+      // 已获得的奖励（金色实心）
       const rewardRecord = Storage.getRewardAtDate(dateStr);
       if (rewardRecord) {
         classes += ' calendar-day-reward';
-        rewardIcon = '<span class="calendar-reward-icon">\u{1F3C6}</span>';
+        rewardIcon = '<span class="calendar-reward-icon">🏆</span>';
+        dataAttr = ' data-date="' + dateStr + '" data-type="earned"';
+      } else if (futureRewardDates[dateStr]) {
+        // 未来奖励目标（金色描边）
+        classes += ' calendar-day-reward-target';
+        rewardIcon = '<span class="calendar-reward-icon">🎁</span>';
+        dataAttr = ' data-date="' + dateStr + '" data-type="target" data-rule=\'' + JSON.stringify(futureRewardDates[dateStr]) + '\'';
       } else if (Storage.isDayComplete(dateStr)) {
         classes += ' calendar-day-complete';
       }
@@ -50,7 +60,7 @@ const CalendarPage = (() => {
         classes += ' calendar-day-today';
       }
 
-      gridHtml += '<span class="' + classes + '" data-date="' + dateStr + '">' +
+      gridHtml += '<span class="' + classes + '"' + dataAttr + '>' +
         day + rewardIcon + '</span>';
     }
 
@@ -99,6 +109,41 @@ const CalendarPage = (() => {
     _bindEvents(container);
   }
 
+  /**
+   * 计算未来奖励目标日期
+   * @param {number} totalCompleted - 已完成天数
+   * @param {string} todayStr - 今天日期
+   * @returns {Object} { "YYYY-MM-DD": rule } 映射
+   */
+  function _calcFutureRewardDates(totalCompleted, todayStr) {
+    var rules = Storage.getRewardRules().sort(function (a, b) { return a.days - b.days; });
+    var history = Storage.getRewardHistory();
+    var result = {};
+
+    for (var i = 0; i < rules.length; i++) {
+      var rule = rules[i];
+      // 检查是否已获得
+      var achieved = history.some(function (h) {
+        return h.days === rule.days && h.reward === rule.reward;
+      });
+      if (achieved) continue;
+
+      // 计算还需要多少天
+      var remaining = rule.days - totalCompleted;
+      if (remaining <= 0) continue;
+
+      // 目标日期 = 今天 + remaining 天
+      var targetDate = new Date(todayStr + 'T00:00:00');
+      targetDate.setDate(targetDate.getDate() + remaining);
+      var dateStr = targetDate.getFullYear() + '-' +
+        String(targetDate.getMonth() + 1).padStart(2, '0') + '-' +
+        String(targetDate.getDate()).padStart(2, '0');
+      result[dateStr] = rule;
+    }
+
+    return result;
+  }
+
   function _bindEvents(container) {
     // Prev / Next month
     var prevBtn = container.querySelector('#calendarPrev');
@@ -110,49 +155,90 @@ const CalendarPage = (() => {
       nextBtn.addEventListener('click', _nextMonth);
     }
 
-    // Click on reward day
-    var rewardDays = container.querySelectorAll('.calendar-day-reward');
-    for (var i = 0; i < rewardDays.length; i++) {
-      rewardDays[i].addEventListener('click', function () {
-        var dateStr = this.getAttribute('data-date');
-        _showRewardDetail(dateStr);
+    // 已获得的奖励（金色实心）
+    var earnedDays = container.querySelectorAll('.calendar-day-reward');
+    for (var i = 0; i < earnedDays.length; i++) {
+      earnedDays[i].addEventListener('click', function () {
+        _showEarnedRewardDetail(this.getAttribute('data-date'));
+      });
+    }
+
+    // 未来奖励目标（金色描边）
+    var targetDays = container.querySelectorAll('.calendar-day-reward-target');
+    for (var j = 0; j < targetDays.length; j++) {
+      targetDays[j].addEventListener('click', function () {
+        var ruleData = this.getAttribute('data-rule');
+        _showTargetRewardDetail(ruleData, this.getAttribute('data-date'));
       });
     }
   }
 
-  function _showRewardDetail(dateStr) {
+  // 已获得奖励弹窗
+  function _showEarnedRewardDetail(dateStr) {
     var record = Storage.getRewardAtDate(dateStr);
     if (!record) return;
 
     var imageHtml = record.image
-      ? '<img src="' + record.image + '" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;margin-bottom:16px;">'
-      : '<div style="font-size:48px;margin-bottom:16px;">🏆</div>';
+      ? '<img src="' + record.image + '" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-bottom:12px;">'
+      : '<div style="font-size:48px;margin-bottom:12px;">🏆</div>';
 
     var progress = Rewards.getNextRewardProgress();
-    var remainingText = '';
-    if (progress) {
-      remainingText = '距下个奖励还差 ' + progress.remaining + ' 天';
-    } else {
-      remainingText = '所有奖励已全部获得！';
-    }
+    var remainingText = progress
+      ? '距下个奖励还需 ' + progress.remaining + ' 天'
+      : '已获得全部奖励 🎉';
 
     var html =
       '<button class="modal-close" onclick="App.closeModal()">✕</button>' +
-      '<div style="text-align:center;padding:16px 0;">' +
+      '<div style="text-align:center;padding:12px 0;">' +
         imageHtml +
-        '<div style="font-size:12px;color:rgba(229,229,229,0.55);margin-bottom:12px;">' +
-          record.achievedAt +
+        '<div style="font-size:12px;color:rgba(229,229,229,0.55);margin-bottom:8px;">' +
+          '获得日期：' + record.achievedAt +
         '</div>' +
-        '<div style="background:linear-gradient(135deg, rgba(255,206,33,0.15), rgba(238,142,0,0.15));border:1px solid rgba(255,206,33,0.3);border-radius:8px;padding:16px;margin-bottom:24px;">' +
+        '<div style="background:linear-gradient(135deg, rgba(255,206,33,0.15), rgba(238,142,0,0.15));border:1px solid rgba(255,206,33,0.3);border-radius:8px;padding:14px;margin-bottom:12px;">' +
           '<div style="font-size:12px;color:#ffce21;margin-bottom:4px;">' +
             '累计打卡 ' + record.days + ' 天' +
           '</div>' +
-          '<div style="font-size:22px;font-weight:600;">' +
+          '<div style="font-size:20px;font-weight:600;">' +
             record.reward +
           '</div>' +
         '</div>' +
-        '<div style="font-size:14px;color:rgba(229,229,229,0.55);">' +
+        '<div style="font-size:13px;color:rgba(229,229,229,0.55);">' +
           remainingText +
+        '</div>' +
+      '</div>';
+
+    App.showModal(html);
+  }
+
+  // 未来奖励目标弹窗
+  function _showTargetRewardDetail(ruleJson, dateStr) {
+    var rule;
+    try { rule = JSON.parse(ruleJson); } catch (e) { return; }
+
+    var imageHtml = rule.image && rule.image.length > 10
+      ? '<img src="' + rule.image + '" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-bottom:12px;">'
+      : '<div style="font-size:48px;margin-bottom:12px;">🎁</div>';
+
+    var totalCompleted = Storage.getCompletedDays();
+    var remaining = rule.days - totalCompleted;
+
+    var html =
+      '<button class="modal-close" onclick="App.closeModal()">✕</button>' +
+      '<div style="text-align:center;padding:12px 0;">' +
+        imageHtml +
+        '<div style="font-size:12px;color:rgba(229,229,229,0.55);margin-bottom:8px;">' +
+          '预计获得日期：' + dateStr +
+        '</div>' +
+        '<div style="background:linear-gradient(135deg, rgba(255,206,33,0.15), rgba(238,142,0,0.15));border:1px solid rgba(255,206,33,0.3);border-radius:8px;padding:14px;margin-bottom:12px;">' +
+          '<div style="font-size:12px;color:#ffce21;margin-bottom:4px;">' +
+            '累计打卡 ' + rule.days + ' 天' +
+          '</div>' +
+          '<div style="font-size:20px;font-weight:600;">' +
+            rule.reward +
+          '</div>' +
+        '</div>' +
+        '<div style="font-size:13px;color:rgba(229,229,229,0.55);">' +
+          '还需再打卡 ' + remaining + ' 天' +
         '</div>' +
       '</div>';
 

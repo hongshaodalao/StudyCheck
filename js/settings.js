@@ -148,9 +148,9 @@ const SettingsPage = (() => {
         <div class="settings-section-header">
           <h3>⚠️ 数据管理</h3>
         </div>
-        <button class="btn btn-danger btn-full" id="clearAllBtn">清除所有打卡和奖励记录</button>
+        <button class="btn btn-danger btn-full" id="clearAllBtn">清除所有数据</button>
         <div style="font-size:var(--text-small);color:var(--color-mute-dark);margin-top:var(--spacing-xs);text-align:center;">
-          此操作不可恢复，请谨慎操作
+          将清除所有打卡记录、奖励记录和奖励规则，此操作不可恢复
         </div>
       </div>
     `;
@@ -163,7 +163,7 @@ const SettingsPage = (() => {
     if (rule.image && rule.image.length > 10) {
       thumbHtml = '<img src="' + rule.image + '" class="rule-item-thumb">';
     } else {
-      thumbHtml = '<div class="rule-item-icon">🏆</div>';
+      thumbHtml = '<img src="data:image/svg+xml,' + encodeURIComponent('<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'36\' height=\'36\' viewBox=\'0 0 36 36\'><rect width=\'36\' height=\'36\' rx=\'6\' fill=\'%23181818\'/><text x=\'18\' y=\'24\' text-anchor=\'middle\' font-size=\'20\'>🏆</text></svg>') + '" class="rule-item-thumb">';
     }
 
     return `
@@ -451,7 +451,7 @@ const SettingsPage = (() => {
   // ==================== Clear All ====================
 
   function _handleClearAll(container) {
-    if (!confirm('确定要清除所有打卡和奖励记录吗？此操作不可恢复！')) return;
+    if (!confirm('确定要清除所有数据吗？包括打卡记录、奖励记录和奖励规则，此操作不可恢复！')) return;
     Storage.clearAllRecords();
     alert('所有记录已清除');
     _refreshRuleList(container);
