@@ -1,0 +1,109 @@
+<h2>学习打卡 — v4 新增修改密码</h2>
+<p class="subtitle">家长设置页增加密码管理功能</p>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">🔐 家长设置 — 完整页面</div>
+    <div class="mockup-body" style="background:#000;color:#fff;padding:16px;font-family:Arial,sans-serif;font-size:13px;">
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-size:20px;font-weight:300;">家长设置</div>
+      </div>
+
+      <!-- 密码管理 -->
+      <div style="background:#181818;border-radius:8px;padding:16px;margin-bottom:12px;">
+        <div style="font-size:14px;font-weight:600;margin-bottom:12px;">🔒 密码管理</div>
+        <div style="margin-bottom:8px;">
+          <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">当前密码</div>
+          <input style="width:100%;background:#000;border:1px solid #ccc;border-radius:4px;padding:10px 12px;color:#fff;font-size:14px;box-sizing:border-box;" placeholder="请输入当前密码" type="password">
+        </div>
+        <div style="margin-bottom:8px;">
+          <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">新密码</div>
+          <input style="width:100%;background:#000;border:1px solid #ccc;border-radius:4px;padding:10px 12px;color:#fff;font-size:14px;box-sizing:border-box;" placeholder="请输入新密码" type="password">
+        </div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">确认新密码</div>
+          <input style="width:100%;background:#000;border:1px solid #ccc;border-radius:4px;padding:10px 12px;color:#fff;font-size:14px;box-sizing:border-box;" placeholder="再次输入新密码" type="password">
+        </div>
+        <div style="background:#0070d1;color:#fff;text-align:center;padding:10px;border-radius:9999px;font-weight:700;font-size:13px;">修改密码</div>
+      </div>
+
+      <!-- 奖励规则 -->
+      <div style="background:#181818;border-radius:8px;padding:16px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div style="font-size:14px;font-weight:600;">🏆 奖励规则</div>
+          <div style="background:#0070d1;color:#fff;padding:6px 14px;border-radius:9999px;font-size:12px;font-weight:700;cursor:pointer;">+ 添加</div>
+        </div>
+        <div style="background:#121314;border-radius:8px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;gap:10px;align-items:center;">
+            <div style="width:36px;height:36px;border-radius:6px;background:linear-gradient(135deg,#ffce21,#ee8e00);display:flex;align-items:center;justify-content:center;font-size:18px;">🎁</div>
+            <div>
+              <div style="font-size:14px;font-weight:500;">累计 10 天</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.5);">看一集动画片</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <span style="color:#0070d1;font-size:12px;cursor:pointer;">编辑</span>
+            <span style="color:#c81b3a;font-size:12px;cursor:pointer;">删除</span>
+          </div>
+        </div>
+        <div style="background:#121314;border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;gap:10px;align-items:center;">
+            <div style="width:36px;height:36px;border-radius:6px;background:#181818;display:flex;align-items:center;justify-content:center;font-size:18px;">🏆</div>
+            <div>
+              <div style="font-size:14px;font-weight:500;">累计 30 天</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.5);">去游乐园玩</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <span style="color:#0070d1;font-size:12px;cursor:pointer;">编辑</span>
+            <span style="color:#c81b3a;font-size:12px;cursor:pointer;">删除</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 数据管理 -->
+      <div style="background:#181818;border-radius:8px;padding:16px;">
+        <div style="font-size:14px;font-weight:600;margin-bottom:8px;">⚠️ 数据管理</div>
+        <div style="background:#c81b3a;color:#fff;text-align:center;padding:12px;border-radius:9999px;font-weight:700;font-size:14px;cursor:pointer;">清除所有打卡和奖励记录</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:8px;text-align:center;">将同时删除所有打卡记录和奖励记录，此操作不可撤销</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mockup-header">🔐 修改密码 — 交互流程</div>
+    <div class="mockup-body" style="background:#121314;color:#fff;padding:24px;font-family:Arial,sans-serif;font-size:13px;line-height:1.8;">
+      <div style="font-size:16px;font-weight:600;margin-bottom:16px;color:#0070d1;">密码管理流程</div>
+
+      <div style="margin-bottom:16px;">
+        <div style="font-size:14px;font-weight:500;margin-bottom:8px;">修改密码</div>
+        <ul style="margin:0;padding-left:20px;color:rgba(255,255,255,0.7);">
+          <li>输入当前密码验证身份</li>
+          <li>输入新密码 + 确认新密码</li>
+          <li>校验：当前密码必须正确</li>
+          <li>校验：两次新密码必须一致</li>
+          <li>校验：新密码不能为空</li>
+          <li>成功后更新 localStorage 中的密码</li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <div style="font-size:14px;font-weight:500;margin-bottom:8px;">错误提示</div>
+        <div style="background:#181818;border-radius:8px;padding:12px;">
+          <div style="color:#c81b3a;font-size:12px;margin-bottom:4px;">✗ 当前密码错误</div>
+          <div style="color:#c81b3a;font-size:12px;margin-bottom:4px;">✗ 两次输入的新密码不一致</div>
+          <div style="color:#c81b3a;font-size:12px;">✗ 新密码不能为空</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:14px;font-weight:500;margin-bottom:8px;">数据存储</div>
+        <div style="background:#1a1a2e;border-radius:8px;padding:12px;font-family:monospace;font-size:12px;color:#e0e0e0;">
+          <div style="color:#888;">// key = "parentPassword"</div>
+          <div>// 修改后直接覆盖原值</div>
+          <div>// 默认密码："123456"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
