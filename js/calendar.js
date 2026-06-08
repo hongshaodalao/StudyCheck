@@ -9,11 +9,15 @@ const CalendarPage = (() => {
 
   function render() {
     const container = document.getElementById('viewCalendar');
+    if (!container) return;
     const todayStr = _today();
     const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
     const firstDayOfWeek = new Date(currentYear, currentMonth - 1, 1).getDay(); // 0=Sunday
     const monthCompleted = Storage.getCompletedDaysInMonth(currentYear, currentMonth);
     const totalCompleted = Storage.getCompletedDays();
+
+    // 确保奖励记录完整（补偿可能遗漏的奖励检测）
+    Rewards.checkNewRewards();
 
     // Build calendar grid cells
     let gridHtml = '';
