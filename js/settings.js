@@ -124,14 +124,14 @@ const SettingsPage = (() => {
         <div class="settings-form-group">
           <label class="input-label">奖励图片（可选）</label>
           <div class="settings-upload-area" id="uploadArea" data-has-image="false">
+            <button class="btn btn-sm btn-secondary" id="removeImage" style="display:none;position:absolute;top:8px;right:8px;z-index:1;">移除</button>
             <div id="uploadPlaceholder">
               <div style="font-size:32px;margin-bottom:var(--spacing-xs);">🖼️</div>
               <div>点击上传图片</div>
-              <div style="font-size:var(--text-small);color:var(--color-mute-dark);margin-top:var(--spacing-xs);">支持 JPG、PNG，自动压缩至 400×400</div>
+              <div style="font-size:var(--text-small);color:var(--color-mute-dark);margin-top:var(--spacing-xs);">支持 JPG、PNG，自动压缩</div>
             </div>
-            <div id="uploadImagePreview" style="display:none;position:relative;">
-              <img id="previewImg" style="width:100%;max-height:180px;object-fit:cover;border-radius:var(--radius-sm);">
-              <button class="btn btn-sm btn-secondary" id="removeImage" style="position:absolute;top:8px;right:8px;">移除</button>
+            <div id="uploadImagePreview" style="display:none;">
+              <img id="previewImg" style="width:300px;height:300px;object-fit:cover;border-radius:var(--radius-sm);">
             </div>
           </div>
           <input type="file" id="ruleImageInput" accept="image/*" style="display:none">
@@ -372,10 +372,12 @@ const SettingsPage = (() => {
     var placeholder = container.querySelector('#uploadPlaceholder');
     var preview = container.querySelector('#uploadImagePreview');
     var previewImg = container.querySelector('#previewImg');
+    var removeBtn = container.querySelector('#removeImage');
 
     placeholder.style.display = 'none';
     preview.style.display = 'block';
     previewImg.src = base64;
+    removeBtn.style.display = '';
     uploadArea.setAttribute('data-has-image', 'true');
     uploadArea.setAttribute('data-image', base64);
   }
@@ -385,10 +387,12 @@ const SettingsPage = (() => {
     var placeholder = container.querySelector('#uploadPlaceholder');
     var preview = container.querySelector('#uploadImagePreview');
     var previewImg = container.querySelector('#previewImg');
+    var removeBtn = container.querySelector('#removeImage');
 
     placeholder.style.display = '';
     preview.style.display = 'none';
     previewImg.src = '';
+    removeBtn.style.display = 'none';
     uploadArea.setAttribute('data-has-image', 'false');
     uploadArea.removeAttribute('data-image');
   }

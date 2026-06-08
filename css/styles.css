@@ -776,10 +776,13 @@ img {
   color: var(--color-mute-dark);
   transition: border-color 0.2s ease;
   overflow: hidden;
-  max-height: 200px;
+  width: 400px;
+  height: 400px;
+  max-width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .settings-upload-area:hover {
