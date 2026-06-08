@@ -37,9 +37,9 @@ const CalendarPage = (() => {
       let rewardIcon = '';
       let dataAttr = '';
 
-      // 已获得的奖励（金色实心）
+      // 已获得的奖励（金色实心）— 需确认规则仍存在
       const rewardRecord = Storage.getRewardAtDate(dateStr);
-      if (rewardRecord) {
+      if (rewardRecord && _ruleExists(rewardRecord.days, rewardRecord.reward)) {
         classes += ' calendar-day-reward';
         rewardIcon = '<span class="calendar-reward-icon">🏆</span>';
         dataAttr = ' data-date="' + dateStr + '" data-type="earned"';
@@ -253,6 +253,14 @@ const CalendarPage = (() => {
       '</div>';
 
     App.showModal(html);
+  }
+
+  function _ruleExists(days, reward) {
+    var rules = Storage.getRewardRules();
+    for (var i = 0; i < rules.length; i++) {
+      if (rules[i].days === days && rules[i].reward === reward) return true;
+    }
+    return false;
   }
 
   function _today() {

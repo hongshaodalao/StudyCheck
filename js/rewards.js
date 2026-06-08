@@ -12,10 +12,10 @@ const Rewards = (() => {
     const newRewards = [];
 
     var todayStr = _today();
-    var todayHasReward = history.some(function (h) { return h.achievedAt === todayStr; });
+    var addedToday = false;
 
     for (const rule of rules) {
-      if (todayHasReward) break; // 当天已有奖励，不再添加
+      if (addedToday) break; // 当天已添加奖励，不再添加
       if (completedDays >= rule.days) {
         var rewardKey = rule.days + ':' + rule.reward;
         const alreadyAchieved = history.some(h =>
@@ -24,13 +24,15 @@ const Rewards = (() => {
         const wasDeleted = Storage.isRewardDeleted(rewardKey);
         if (!alreadyAchieved && !wasDeleted) {
           const record = {
-            achievedAt: _today(),
+            achievedAt: todayStr,
             days: rule.days,
             reward: rule.reward,
             image: rule.image || null
           };
           Storage.addRewardRecord(record);
+          history.push(record); // 同步更新本地 history 数组
           newRewards.push(record);
+          addedToday = true;
         }
       }
     }

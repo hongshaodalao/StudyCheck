@@ -106,8 +106,28 @@ const Storage = (() => {
 
   function deleteRewardRule(id) {
     const rules = getRewardRules();
-    const filtered = rules.filter(function (r) { return r.id !== id; });
+    var deletedRule = null;
+    for (var i = 0; i < rules.length; i++) {
+      if (rules[i].id === id) {
+        deletedRule = rules[i];
+        break;
+      }
+    }
+    var filtered = rules.filter(function (r) { return r.id !== id; });
     _set('rewardRules', filtered);
+
+    // 同步清理对应的历史记录
+    if (deletedRule) {
+      var history = getRewardHistory();
+      var newHistory = history.filter(function (h) {
+        return !(h.days === deletedRule.days && h.reward === deletedRule.reward);
+      });
+      _set('rewardHistory', newHistory);
+
+      // 标记为已删除，防止重新创建
+      addDeletedReward(deletedRule.days + ':' + deletedRule.reward);
+    }
+
     return filtered.length < rules.length;
   }
 
