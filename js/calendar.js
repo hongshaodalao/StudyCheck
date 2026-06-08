@@ -180,7 +180,7 @@ const CalendarPage = (() => {
 
     var imageHtml = record.image
       ? '<img src="' + record.image + '" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-bottom:12px;">'
-      : '<div style="font-size:48px;margin-bottom:12px;">🏆</div>';
+      : '<div style="font-size:48px;margin-bottom:12px;text-align:center;">🏆</div>';
 
     var progress = Rewards.getNextRewardProgress();
     var remainingText = progress
@@ -217,7 +217,7 @@ const CalendarPage = (() => {
 
     var imageHtml = rule.image && rule.image.length > 10
       ? '<img src="' + rule.image + '" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-bottom:12px;">'
-      : '<div style="font-size:48px;margin-bottom:12px;">🎁</div>';
+      : '<div style="font-size:48px;margin-bottom:12px;text-align:center;">🎁</div>';
 
     var totalCompleted = Storage.getCompletedDays();
     var remaining = rule.days - totalCompleted;

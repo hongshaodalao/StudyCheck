@@ -515,11 +515,11 @@ img {
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-full);
-  font-size: var(--text-small);
+  font-size: var(--text-caption);
   color: var(--color-on-dark);
   transition: background-color 0.2s ease;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   margin: 3px auto;
 }
 
@@ -561,10 +561,10 @@ img {
 }
 
 .calendar-reward-icon {
-  font-size: 8px;
+  font-size: 11px;
   position: absolute;
-  top: 0;
-  right: 2px;
+  top: -1px;
+  right: 0;
   line-height: 1;
 }
 

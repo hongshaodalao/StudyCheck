@@ -42,7 +42,7 @@ const Rewards = (() => {
 
     const imageHtml = reward.image
       ? `<img src="${reward.image}" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;margin-bottom:16px;">`
-      : `<div style="font-size:64px;margin-bottom:16px;">🏆</div>`;
+      : `<div style="font-size:64px;margin-bottom:16px;text-align:center;">🏆</div>`;
 
     const footerText = rewards.length > 1
       ? `还有 ${rewards.length - 1} 个奖励待查看`
