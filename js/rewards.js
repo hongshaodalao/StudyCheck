@@ -41,8 +41,8 @@ const Rewards = (() => {
     const reward = rewards[0];
 
     const imageHtml = reward.image
-      ? `<img src="${reward.image}" style="width:100%;max-height:200px;object-fit:cover;border-radius:var(--radius-md);margin-bottom:var(--space-md);">`
-      : `<div style="font-size:64px;margin-bottom:var(--space-md);">\u{1F3C6}</div>`;
+      ? `<img src="${reward.image}" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;margin-bottom:16px;">`
+      : `<div style="font-size:64px;margin-bottom:16px;">🏆</div>`;
 
     const footerText = rewards.length > 1
       ? `还有 ${rewards.length - 1} 个奖励待查看`
@@ -50,20 +50,20 @@ const Rewards = (() => {
 
     const html = `
       <button class="modal-close" onclick="App.closeModal()">✕</button>
-      <div style="text-align:center;padding:var(--space-md) 0;">
+      <div style="text-align:center;padding:16px 0;">
         ${imageHtml}
-        <div style="font-size:var(--font-size-small);color:var(--color-mute-dark);margin-bottom:var(--space-sm);">
+        <div style="font-size:12px;color:rgba(229,229,229,0.55);margin-bottom:12px;">
           ${reward.achievedAt}
         </div>
-        <div style="background:linear-gradient(135deg, rgba(255,206,33,0.15), rgba(238,142,0,0.15));border:1px solid rgba(255,206,33,0.3);border-radius:var(--radius-md);padding:var(--space-md);margin-bottom:var(--space-lg);">
-          <div style="font-size:var(--font-size-small);color:var(--color-gold-start);margin-bottom:var(--space-xxs);">
+        <div style="background:linear-gradient(135deg, rgba(255,206,33,0.15), rgba(238,142,0,0.15));border:1px solid rgba(255,206,33,0.3);border-radius:8px;padding:16px;margin-bottom:24px;">
+          <div style="font-size:12px;color:#ffce21;margin-bottom:4px;">
             累计打卡 ${reward.days} 天
           </div>
-          <div style="font-size:var(--font-size-heading);font-weight:var(--font-weight-semibold);">
+          <div style="font-size:22px;font-weight:600;">
             ${reward.reward}
           </div>
         </div>
-        <div style="font-size:var(--font-size-caption);color:var(--color-mute-dark);">
+        <div style="font-size:14px;color:rgba(229,229,229,0.55);">
           ${footerText}
         </div>
       </div>

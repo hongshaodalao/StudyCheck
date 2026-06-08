@@ -484,6 +484,14 @@ img {
   opacity: 0.8;
 }
 
+.calendar-nav-title {
+  font-size: var(--text-body);
+  font-weight: 500;
+  color: var(--color-on-dark);
+  min-width: 120px;
+  text-align: center;
+}
+
 .calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -578,6 +586,10 @@ img {
   text-align: center;
 }
 
+.calendar-stat {
+  flex: 1;
+}
+
 .calendar-stat-value {
   font-size: var(--text-heading);
   font-weight: 600;
@@ -669,6 +681,35 @@ img {
 .rule-item-details {
   font-size: var(--text-caption);
   color: var(--color-mute-dark);
+}
+
+.rule-item-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.rule-item-days {
+  font-size: var(--text-body);
+  font-weight: 500;
+  color: var(--color-on-dark);
+}
+
+.rule-item-reward {
+  font-size: var(--text-caption);
+  color: var(--color-mute-dark);
+}
+
+.rule-action-btn {
+  background: none;
+  border: none;
+  font-size: var(--text-caption);
+  cursor: pointer;
+  padding: 4px 8px;
 }
 
 .rule-action-edit {

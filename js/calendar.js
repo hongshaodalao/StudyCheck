@@ -121,8 +121,8 @@ const CalendarPage = (() => {
     if (!record) return;
 
     var imageHtml = record.image
-      ? '<img src="' + record.image + '" style="width:100%;max-height:200px;object-fit:cover;border-radius:var(--radius-md);margin-bottom:var(--spacing-md);">'
-      : '<div style="font-size:48px;margin-bottom:var(--spacing-md);">\u{1F3C6}</div>';
+      ? '<img src="' + record.image + '" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;margin-bottom:16px;">'
+      : '<div style="font-size:48px;margin-bottom:16px;">🏆</div>';
 
     var progress = Rewards.getNextRewardProgress();
     var remainingText = '';
@@ -134,20 +134,20 @@ const CalendarPage = (() => {
 
     var html =
       '<button class="modal-close" onclick="App.closeModal()">✕</button>' +
-      '<div style="text-align:center;padding:var(--spacing-md) 0;">' +
+      '<div style="text-align:center;padding:16px 0;">' +
         imageHtml +
-        '<div style="font-size:var(--font-size-small);color:var(--color-mute-dark);margin-bottom:var(--spacing-sm);">' +
+        '<div style="font-size:12px;color:rgba(229,229,229,0.55);margin-bottom:12px;">' +
           record.achievedAt +
         '</div>' +
-        '<div style="background:linear-gradient(135deg, rgba(255,206,33,0.15), rgba(238,142,0,0.15));border:1px solid rgba(255,206,33,0.3);border-radius:var(--radius-md);padding:var(--spacing-md);margin-bottom:var(--spacing-lg);">' +
-          '<div style="font-size:var(--font-size-small);color:var(--color-gold-start);margin-bottom:var(--spacing-xxs);">' +
+        '<div style="background:linear-gradient(135deg, rgba(255,206,33,0.15), rgba(238,142,0,0.15));border:1px solid rgba(255,206,33,0.3);border-radius:8px;padding:16px;margin-bottom:24px;">' +
+          '<div style="font-size:12px;color:#ffce21;margin-bottom:4px;">' +
             '累计打卡 ' + record.days + ' 天' +
           '</div>' +
-          '<div style="font-size:var(--font-size-heading);font-weight:var(--font-weight-semibold);">' +
+          '<div style="font-size:22px;font-weight:600;">' +
             record.reward +
           '</div>' +
         '</div>' +
-        '<div style="font-size:var(--font-size-caption);color:var(--color-mute-dark);">' +
+        '<div style="font-size:14px;color:rgba(229,229,229,0.55);">' +
           remainingText +
         '</div>' +
       '</div>';
