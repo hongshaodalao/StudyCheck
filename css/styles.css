@@ -506,7 +506,9 @@ img {
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: var(--spacing-xxs);
+  gap: 2px;
+  max-width: 320px;
+  margin: 0 auto;
 }
 
 .calendar-day {
@@ -517,8 +519,8 @@ img {
   font-size: var(--text-small);
   color: var(--color-on-dark);
   transition: background-color 0.2s ease;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   margin: 2px auto;
 }
 
