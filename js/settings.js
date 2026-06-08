@@ -163,7 +163,7 @@ const SettingsPage = (() => {
     if (rule.image && rule.image.length > 10) {
       thumbHtml = '<img src="' + rule.image + '" class="rule-item-thumb">';
     } else {
-      thumbHtml = '<img src="data:image/svg+xml,' + encodeURIComponent('<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'36\' height=\'36\' viewBox=\'0 0 36 36\'><rect width=\'36\' height=\'36\' rx=\'6\' fill=\'%23181818\'/><text x=\'18\' y=\'24\' text-anchor=\'middle\' font-size=\'20\'>🏆</text></svg>') + '" class="rule-item-thumb">';
+      thumbHtml = '<div class="rule-item-thumb rule-item-thumb-default">🏆</div>';
     }
 
     return `
