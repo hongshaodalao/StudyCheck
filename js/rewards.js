@@ -13,10 +13,12 @@ const Rewards = (() => {
 
     for (const rule of rules) {
       if (completedDays >= rule.days) {
+        var rewardKey = rule.days + ':' + rule.reward;
         const alreadyAchieved = history.some(h =>
           h.days === rule.days && h.reward === rule.reward
         );
-        if (!alreadyAchieved) {
+        const wasDeleted = Storage.isRewardDeleted(rewardKey);
+        if (!alreadyAchieved && !wasDeleted) {
           const record = {
             achievedAt: _today(),
             days: rule.days,
@@ -49,7 +51,7 @@ const Rewards = (() => {
       : '继续加油！';
 
     const html = `
-      <button class="modal-close" onclick="App.closeModal()">✕</button>
+      <div style="overflow:hidden;"><button class="modal-close" onclick="App.closeModal()">✕</button></div>
       <div style="text-align:center;padding:16px 0;">
         ${imageHtml}
         <div style="font-size:12px;color:rgba(229,229,229,0.55);margin-bottom:12px;">

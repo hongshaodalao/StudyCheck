@@ -16,9 +16,6 @@ const CalendarPage = (() => {
     const monthCompleted = Storage.getCompletedDaysInMonth(currentYear, currentMonth);
     const totalCompleted = Storage.getCompletedDays();
 
-    // 确保奖励记录完整（补偿可能遗漏的奖励检测）
-    Rewards.checkNewRewards();
-
     // Build calendar grid cells
     let gridHtml = '';
 
@@ -123,11 +120,13 @@ const CalendarPage = (() => {
 
     for (var i = 0; i < rules.length; i++) {
       var rule = rules[i];
-      // 检查是否已获得
+      // 检查是否已获得或已删除
+      var rewardKey = rule.days + ':' + rule.reward;
       var achieved = history.some(function (h) {
         return h.days === rule.days && h.reward === rule.reward;
       });
-      if (achieved) continue;
+      var wasDeleted = Storage.isRewardDeleted(rewardKey);
+      if (achieved || wasDeleted) continue;
 
       // 如果今天已完成，算上今天；否则不算今天
       var effectiveCompleted = todayComplete ? totalCompleted : totalCompleted;
@@ -195,7 +194,9 @@ const CalendarPage = (() => {
       : '已获得全部奖励 🎉';
 
     var html =
+      '<div style="overflow:hidden;">' +
       '<button class="modal-close" onclick="App.closeModal()">✕</button>' +
+      '</div>' +
       '<div style="text-align:center;padding:12px 0;">' +
         imageHtml +
         '<div style="font-size:12px;color:rgba(229,229,229,0.55);margin-bottom:8px;">' +
@@ -230,7 +231,9 @@ const CalendarPage = (() => {
     var remaining = rule.days - totalCompleted;
 
     var html =
+      '<div style="overflow:hidden;">' +
       '<button class="modal-close" onclick="App.closeModal()">✕</button>' +
+      '</div>' +
       '<div style="text-align:center;padding:12px 0;">' +
         imageHtml +
         '<div style="font-size:12px;color:rgba(229,229,229,0.55);margin-bottom:8px;">' +

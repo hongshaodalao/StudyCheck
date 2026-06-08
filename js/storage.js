@@ -125,6 +125,10 @@ const Storage = (() => {
   function deleteRewardRecord(index) {
     const history = getRewardHistory();
     if (index >= 0 && index < history.length) {
+      var record = history[index];
+      // 记录已删除的奖励，防止被重新创建
+      var key = record.days + ':' + record.reward;
+      addDeletedReward(key);
       history.splice(index, 1);
       _set('rewardHistory', history);
       return true;
@@ -164,6 +168,24 @@ const Storage = (() => {
     _set('checkins', {});
     _set('rewardHistory', []);
     _set('rewardRules', []);
+    _set('deletedRewards', []);
+  }
+
+  // 已删除的奖励记录（防止被重新创建）
+  function getDeletedRewards() {
+    return _get('deletedRewards') || [];
+  }
+
+  function addDeletedReward(key) {
+    var deleted = getDeletedRewards();
+    if (deleted.indexOf(key) === -1) {
+      deleted.push(key);
+      _set('deletedRewards', deleted);
+    }
+  }
+
+  function isRewardDeleted(key) {
+    return getDeletedRewards().indexOf(key) !== -1;
   }
 
   return {
@@ -182,6 +204,9 @@ const Storage = (() => {
     addRewardRecord: addRewardRecord,
     deleteRewardRecord: deleteRewardRecord,
     getRewardAtDate: getRewardAtDate,
+    getDeletedRewards: getDeletedRewards,
+    addDeletedReward: addDeletedReward,
+    isRewardDeleted: isRewardDeleted,
     getPassword: getPassword,
     verifyPassword: verifyPassword,
     changePassword: changePassword,
