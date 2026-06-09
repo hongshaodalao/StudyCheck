@@ -55,6 +55,250 @@
   --text-small: 12px;
 }
 
+/* ---------- Theme: Nintendo 2001 ---------- */
+
+[data-theme="nintendo"] {
+  --color-primary: #e60012;
+  --color-primary-pressed: #c50010;
+  --color-canvas-dark: #7a8aba;
+  --color-surface-card: #dedede;
+  --color-surface-elevated: #9fbee7;
+  --color-warning: #e60012;
+  --color-gold-start: #ecab37;
+  --color-gold-end: #e48600;
+  --color-hairline-dark: rgba(93, 95, 140, 0.3);
+  --color-mute-dark: rgba(33, 36, 46, 0.55);
+  --color-ash-dark: rgba(93, 95, 140, 0.25);
+  --color-body-dark: rgba(33, 36, 46, 0.7);
+  --color-on-dark: #21242e;
+  --color-on-primary: #ffffff;
+}
+
+/* ---------- Theme: Tesla ---------- */
+
+[data-theme="tesla"] {
+  --color-primary: #3E6AE1;
+  --color-primary-pressed: #2d55c7;
+  --color-canvas-dark: #ffffff;
+  --color-surface-card: #f4f4f4;
+  --color-surface-elevated: #ffffff;
+  --color-warning: #e60012;
+  --color-gold-start: #3E6AE1;
+  --color-gold-end: #3E6AE1;
+  --color-hairline-dark: rgba(0, 0, 0, 0.1);
+  --color-mute-dark: rgba(23, 26, 32, 0.5);
+  --color-ash-dark: rgba(0, 0, 0, 0.12);
+  --color-body-dark: rgba(23, 26, 32, 0.6);
+  --color-on-dark: #171A20;
+  --color-on-primary: #ffffff;
+}
+
+/* Tesla 浅色主题覆盖 */
+[data-theme="tesla"] body {
+  background: #ffffff;
+  color: #171A20;
+}
+
+[data-theme="tesla"] .nav-top {
+  background: #ffffff;
+  border-bottom: 1px solid #eeeeee;
+}
+
+[data-theme="tesla"] .nav-link {
+  color: #5C5E62;
+}
+
+[data-theme="tesla"] .nav-link.active {
+  color: #3E6AE1;
+}
+
+[data-theme="tesla"] .nav-bottom {
+  background: #ffffff;
+  border-top: 1px solid #eeeeee;
+}
+
+[data-theme="tesla"] .nav-bottom-item {
+  color: #5C5E62;
+}
+
+[data-theme="tesla"] .card,
+[data-theme="tesla"] .settings-section {
+  background: #f4f4f4;
+  border: 1px solid #eeeeee;
+}
+
+[data-theme="tesla"] .btn-secondary {
+  color: #393C41;
+  border-color: #D0D1D2;
+}
+
+[data-theme="tesla"] .input {
+  background: #ffffff;
+  border-color: #D0D1D2;
+  color: #171A20;
+}
+
+[data-theme="tesla"] .input-label {
+  color: #5C5E62;
+}
+
+[data-theme="tesla"] .rule-item {
+  background: #ffffff;
+}
+
+[data-theme="tesla"] .modal {
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+}
+
+[data-theme="tesla"] .modal-close {
+  color: #5C5E62;
+}
+
+[data-theme="tesla"] .settings-upload-area {
+  border-color: #D0D1D2;
+}
+
+[data-theme="tesla"] .calendar-day-complete {
+  background-color: #3E6AE1;
+  color: #ffffff;
+}
+
+[data-theme="tesla"] .calendar-day-reward {
+  background: #3E6AE1;
+  color: #ffffff;
+}
+
+[data-theme="tesla"] .calendar-day-reward-target {
+  border-color: #3E6AE1;
+  color: #3E6AE1;
+}
+
+[data-theme="tesla"] .calendar-day-today {
+  outline-color: #3E6AE1;
+}
+
+[data-theme="tesla"] .checkin-checkbox.checked {
+  background-color: #3E6AE1;
+  border-color: #3E6AE1;
+}
+
+[data-theme="tesla"] .status-complete {
+  color: #3E6AE1;
+}
+
+[data-theme="tesla"] .reward-progress-fill {
+  background-color: #3E6AE1;
+}
+
+[data-theme="tesla"] .rule-item-thumb-default {
+  background: #f4f4f4;
+}
+
+[data-theme="tesla"] .rule-action-edit {
+  color: #3E6AE1;
+}
+
+/* Nintendo 2001 主题覆盖 */
+[data-theme="nintendo"] body {
+  background: #7a8aba;
+  color: #21242e;
+}
+
+[data-theme="nintendo"] .nav-top {
+  background: #21242e;
+}
+
+[data-theme="nintendo"] .nav-link {
+  color: #ecab37;
+}
+
+[data-theme="nintendo"] .nav-link.active {
+  color: #f68d1f;
+}
+
+[data-theme="nintendo"] .card,
+[data-theme="nintendo"] .settings-section {
+  background: #dedede;
+  border: 1px solid #5a5f8c;
+}
+
+[data-theme="nintendo"] .btn-secondary {
+  color: #21242e;
+  border-color: #5a5f8c;
+}
+
+[data-theme="nintendo"] .input {
+  background: #ffffff;
+  border-color: #5a5f8c;
+  color: #21242e;
+}
+
+[data-theme="nintendo"] .input-label {
+  color: #3d4f97;
+}
+
+[data-theme="nintendo"] .rule-item {
+  background: #9fbee7;
+}
+
+[data-theme="nintendo"] .modal {
+  background: #dedede;
+  border: 1px solid #5a5f8c;
+}
+
+[data-theme="nintendo"] .settings-upload-area {
+  border-color: #5a5f8c;
+}
+
+[data-theme="nintendo"] .calendar-day-complete {
+  background-color: #e60012;
+  color: #ffffff;
+}
+
+[data-theme="nintendo"] .calendar-day-reward {
+  background: linear-gradient(135deg, #ecab37, #e48600);
+  color: #21242e;
+}
+
+[data-theme="nintendo"] .calendar-day-reward-target {
+  border-color: #ecab37;
+  color: #e48600;
+}
+
+[data-theme="nintendo"] .calendar-day-today {
+  outline-color: #e60012;
+}
+
+[data-theme="nintendo"] .checkin-checkbox.checked {
+  background-color: #e60012;
+  border-color: #e60012;
+}
+
+[data-theme="nintendo"] .status-complete {
+  color: #e60012;
+}
+
+[data-theme="nintendo"] .reward-progress-fill {
+  background-color: #e60012;
+}
+
+[data-theme="nintendo"] .checkin-subject {
+  border-bottom-color: #5a5f8c;
+}
+
+[data-theme="nintendo"] .rule-item-thumb-default {
+  background: #9fbee7;
+}
+
+[data-theme="nintendo"] .rule-action-edit {
+  color: #3d4f97;
+}
+
+[data-theme="nintendo"] .settings-upload-area[data-has-image="true"] {
+  border-style: solid;
+}
+
 
 /* ---------- Reset & Base Styles ---------- */
 
@@ -807,6 +1051,65 @@ img {
   height: 60px;
   object-fit: cover;
   border-radius: var(--radius-sm);
+}
+
+
+/* ---------- Theme Selector ---------- */
+
+.theme-selector {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.theme-option {
+  flex: 1;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  min-height: 90px;
+}
+
+.theme-option:hover {
+  transform: translateY(-2px);
+}
+
+.theme-option-active {
+  box-shadow: 0 0 0 3px var(--color-primary);
+}
+
+.theme-option-color {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  margin-bottom: var(--spacing-xs);
+}
+
+.theme-option-name {
+  font-size: var(--text-caption);
+  font-weight: 600;
+}
+
+.theme-option-desc {
+  font-size: var(--text-small);
+  margin-top: 2px;
+}
+
+.theme-option-check {
+  position: absolute;
+  top: var(--spacing-xs);
+  right: var(--spacing-xs);
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 

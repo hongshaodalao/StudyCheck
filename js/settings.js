@@ -77,6 +77,16 @@ const SettingsPage = (() => {
       <!-- 密码管理 -->
       <div class="settings-section">
         <div class="settings-section-header">
+          <h3>🎨 配色方案</h3>
+        </div>
+        <div class="theme-selector">
+          ${_renderThemeOptions()}
+        </div>
+      </div>
+
+      <!-- 密码管理 -->
+      <div class="settings-section">
+        <div class="settings-section-header">
           <h3>🔐 密码管理</h3>
         </div>
         <div class="settings-form-group">
@@ -163,6 +173,31 @@ const SettingsPage = (() => {
         </div>
       </div>
     `;
+  }
+
+  // ==================== Theme Selector ====================
+
+  function _renderThemeOptions() {
+    var currentTheme = Storage.getTheme();
+    var themes = [
+      { id: 'playstation', name: 'PlayStation', desc: '深邃黑蓝', color: '#0070d1', bg: '#000000' },
+      { id: 'nintendo', name: 'Nintendo 2001', desc: '灰蓝金属', color: '#e60012', bg: '#7a8aba' },
+      { id: 'tesla', name: 'Tesla', desc: '极简白净', color: '#3E6AE1', bg: '#ffffff' }
+    ];
+
+    var html = '';
+    for (var i = 0; i < themes.length; i++) {
+      var t = themes[i];
+      var isActive = currentTheme === t.id;
+      var borderStyle = t.id === 'tesla' ? 'border:1px solid #D0D1D2;' : '';
+      html += '<div class="theme-option' + (isActive ? ' theme-option-active' : '') + '" data-theme-id="' + t.id + '" style="background:' + t.bg + ';' + borderStyle + '">'
+        + '<div class="theme-option-color" style="background:' + t.color + ';"></div>'
+        + '<div class="theme-option-name" style="color:' + (t.id === 'tesla' ? '#171A20' : '#fff') + ';">' + t.name + '</div>'
+        + '<div class="theme-option-desc" style="color:' + (t.id === 'tesla' ? '#5C5E62' : 'rgba(255,255,255,0.6)') + ';">' + t.desc + '</div>'
+        + (isActive ? '<div class="theme-option-check">✓</div>' : '')
+        + '</div>';
+    }
+    return html;
   }
 
   // ==================== Rule Item HTML ====================
@@ -267,6 +302,17 @@ const SettingsPage = (() => {
 
     container.addEventListener('click', function (e) {
       var target = e.target;
+
+      // Theme selection
+      var themeOption = target.closest('.theme-option');
+      if (themeOption) {
+        var themeId = themeOption.getAttribute('data-theme-id');
+        Storage.setTheme(themeId);
+        document.body.setAttribute('data-theme', themeId === 'playstation' ? '' : themeId);
+        if (themeId === 'playstation') document.body.removeAttribute('data-theme');
+        render(); // re-render to update active state
+        return;
+      }
 
       // Rule edit/delete
       if (target.classList.contains('rule-action-edit')) {

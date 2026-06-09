@@ -27,6 +27,18 @@ const Storage = (() => {
     if (_get('rewardHistory') === null) {
       _set('rewardHistory', []);
     }
+    if (_get('theme') === null) {
+      _set('theme', 'playstation');
+    }
+  }
+
+  // Theme
+  function getTheme() {
+    return _get('theme') || 'playstation';
+  }
+
+  function setTheme(theme) {
+    _set('theme', theme);
   }
 
   // Checkins
@@ -230,6 +242,8 @@ const Storage = (() => {
     getPassword: getPassword,
     verifyPassword: verifyPassword,
     changePassword: changePassword,
-    clearAllRecords: clearAllRecords
+    clearAllRecords: clearAllRecords,
+    getTheme: getTheme,
+    setTheme: setTheme
   };
 })();

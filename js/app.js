@@ -4,8 +4,16 @@ const App = (() => {
   function init() {
     Storage.init();
     CalendarPage.init();
+    _applyTheme();
     _bindNavigation();
     _navigateTo('checkin');
+  }
+
+  function _applyTheme() {
+    var theme = Storage.getTheme();
+    if (theme && theme !== 'playstation') {
+      document.body.setAttribute('data-theme', theme);
+    }
   }
 
   function showModal(html) {
