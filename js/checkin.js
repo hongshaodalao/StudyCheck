@@ -54,15 +54,11 @@ const CheckinPage = (() => {
     checkin[subjectKey] = !checkin[subjectKey];
     Storage.setCheckin(date, checkin);
 
-    // 检查是否全部完成
+    // 检查是否全部完成 → 检查当天是否有奖励
     if (Storage.isDayComplete(date)) {
-      // 检查新奖励
-      var newRewards = Rewards.checkNewRewards();
-      if (newRewards.length > 0) {
-        setTimeout(function () {
-          Rewards.showCelebration(newRewards);
-        }, 500);
-      }
+      setTimeout(function () {
+        Rewards.checkTodayReward();
+      }, 300);
     }
 
     render();
@@ -100,9 +96,14 @@ const CheckinPage = (() => {
     }
     html += '</div>';
 
-    // 奖励进度
-    var progress = Rewards.getNextRewardProgress();
-    html += _renderRewardProgress(progress);
+    // 今日奖励提示
+    var todayRule = Storage.getRewardRuleByDate(today);
+    if (todayRule) {
+      html += '<div class="card" style="margin-top:var(--spacing-lg);text-align:center;">';
+      html += '<div style="font-size:var(--text-small);color:var(--color-mute-dark);">🎁 今日奖励</div>';
+      html += '<div style="font-size:var(--text-body);font-weight:600;margin-top:var(--spacing-xxs);">' + todayRule.reward + '</div>';
+      html += '</div>';
+    }
 
     container.innerHTML = html;
 
