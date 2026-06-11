@@ -96,13 +96,26 @@ const CheckinPage = (() => {
     }
     html += '</div>';
 
-    // 今日奖励提示
+    // 奖励区域
     var todayRule = Storage.getRewardRuleByDate(today);
     if (todayRule) {
+      // 今日有奖励
       html += '<div class="card" style="margin-top:var(--spacing-lg);text-align:center;">';
       html += '<div style="font-size:var(--text-small);color:var(--color-mute-dark);">🎁 今日奖励</div>';
       html += '<div style="font-size:var(--text-body);font-weight:600;margin-top:var(--spacing-xxs);">' + todayRule.reward + '</div>';
+      if (isComplete) {
+        html += '<div style="font-size:var(--text-small);color:#ffce21;margin-top:var(--spacing-xs);">🎉 已获得！</div>';
+      } else {
+        html += '<div style="font-size:var(--text-small);color:var(--color-mute-dark);margin-top:var(--spacing-xs);">完成打卡即可获得</div>';
+      }
       html += '</div>';
+    } else {
+      // 今日无奖励，显示下一个奖励进度
+      var nextReward = _getNextReward(today);
+      if (nextReward) {
+        var daysUntil = _daysBetween(today, nextReward.date);
+        html += _renderRewardProgress(nextReward, daysUntil);
+      }
     }
 
     container.innerHTML = html;
@@ -117,6 +130,41 @@ const CheckinPage = (() => {
         });
       })(rows[j]);
     }
+  }
+
+  function _getNextReward(today) {
+    var rules = Storage.getRewardRules();
+    var next = null;
+    for (var i = 0; i < rules.length; i++) {
+      if (rules[i].date >= today && !Storage.isDayComplete(rules[i].date)) {
+        if (!next || rules[i].date < next.date) {
+          next = rules[i];
+        }
+      }
+    }
+    return next;
+  }
+
+  function _daysBetween(d1, d2) {
+    var date1 = new Date(d1 + 'T00:00:00');
+    var date2 = new Date(d2 + 'T00:00:00');
+    return Math.round((date2 - date1) / (1000 * 60 * 60 * 24));
+  }
+
+  function _renderRewardProgress(rule, daysUntil) {
+    return '<div class="card reward-progress" style="margin-top:var(--spacing-lg);">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--spacing-xs);">' +
+        '<span style="font-size:var(--text-caption);">🎁 下一个奖励</span>' +
+        '<span style="font-size:var(--text-small);color:var(--color-mute-dark);">' + rule.date + '</span>' +
+      '</div>' +
+      '<div style="font-size:var(--text-body);font-weight:600;margin-bottom:var(--spacing-sm);">' + rule.reward + '</div>' +
+      '<div class="reward-progress-bar">' +
+        '<div class="reward-progress-bar-fill" style="width:0%"></div>' +
+      '</div>' +
+      '<div style="font-size:var(--text-small);color:var(--color-mute-dark);margin-top:var(--spacing-xs);">' +
+        '还需 ' + daysUntil + ' 天' +
+      '</div>' +
+    '</div>';
   }
 
   return { render: render };
