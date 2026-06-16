@@ -192,7 +192,9 @@ const SettingsPage = (() => {
     var subjects = Storage.getSubjects();
     var checkin = Storage.getCheckin(dateStr);
     var rule = Storage.getRewardRuleByDate(dateStr);
+    var isEditReward = !!rule;
 
+    // 科目勾选
     var subjectsHtml = '';
     for (var i = 0; i < subjects.length; i++) {
       var s = subjects[i];
@@ -204,11 +206,34 @@ const SettingsPage = (() => {
       '</label>';
     }
 
-    var rewardHtml = rule
-      ? '<div style="background:linear-gradient(135deg, rgba(255,206,33,0.15), rgba(238,142,0,0.15));border:1px solid rgba(255,206,33,0.3);border-radius:var(--radius-md);padding:var(--spacing-sm);margin-bottom:var(--spacing-md);text-align:center;">' +
-        '<div style="font-size:var(--text-small);color:#ffce21;">🎁 奖励日</div>' +
-        '<div style="font-weight:600;">' + rule.reward + '</div></div>'
-      : '';
+    // 奖励设置
+    var currentImage = (isEditReward && rule.image) ? rule.image : null;
+    var rewardValue = isEditReward ? rule.reward : '';
+    var rewardToggleLabel = isEditReward ? '编辑奖励' : '添加奖励';
+    var rewardFormDisplay = isEditReward ? '' : 'none';
+
+    var rewardSection =
+      '<div style="margin-bottom:var(--spacing-md);">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--spacing-sm);">' +
+          '<span style="font-size:var(--text-caption);font-weight:600;">🎁 奖励设置</span>' +
+          '<button class="btn btn-sm btn-secondary" id="toggleRewardBtn">' + rewardToggleLabel + '</button>' +
+        '</div>' +
+        '<div id="rewardForm" style="display:' + rewardFormDisplay + ';">' +
+          '<div class="settings-form-group"><label class="input-label">奖励内容</label>' +
+            '<input type="text" class="input" id="popupRewardInput" placeholder="例如：看一集动画片" value="' + rewardValue + '"></div>' +
+          '<div class="settings-form-group"><label class="input-label">奖励图片（可选）</label>' +
+            '<div class="settings-upload-area" id="popupUploadArea" data-has-image="' + (currentImage ? 'true' : 'false') + '" style="width:150px;height:120px;margin:0 auto;">' +
+              '<button class="btn btn-sm btn-secondary" id="popupRemoveImg" style="display:' + (currentImage ? '' : 'none') + ';position:absolute;top:4px;right:4px;z-index:1;font-size:11px;padding:2px 6px;">移除</button>' +
+              '<div id="popupPlaceholder" style="display:' + (currentImage ? 'none' : '') + ';"><div style="font-size:20px;">🖼️</div><div style="font-size:var(--text-small);">点击上传</div></div>' +
+              '<div id="popupPreviewWrap" style="display:' + (currentImage ? '' : 'none') + ';">' +
+                '<img id="popupPreviewImg" style="width:80px;height:80px;object-fit:cover;border-radius:var(--radius-sm);"' + (currentImage ? ' src="' + currentImage + '"' : '') + '>' +
+              '</div>' +
+            '</div>' +
+            '<input type="file" id="popupFileInput" accept="image/*" style="display:none">' +
+          '</div>' +
+          (isEditReward ? '<button class="btn btn-sm" style="color:var(--color-warning);background:none;font-size:var(--text-small);" id="deleteRewardBtn">删除奖励</button>' : '') +
+        '</div>' +
+      '</div>';
 
     var html =
       '<div style="overflow:hidden;"><button class="modal-close" onclick="App.closeModal()">✕</button></div>' +
@@ -216,7 +241,8 @@ const SettingsPage = (() => {
         '<div style="font-size:var(--text-heading);font-weight:600;">补卡</div>' +
         '<div style="font-size:var(--text-caption);color:var(--color-mute-dark);">' + dateStr + '</div>' +
       '</div>' +
-      rewardHtml +
+      rewardSection +
+      '<div style="font-size:var(--text-caption);font-weight:600;margin-bottom:var(--spacing-sm);">📚 打卡科目</div>' +
       '<div>' + subjectsHtml + '</div>' +
       '<div style="margin-top:var(--spacing-md);">' +
         '<button class="btn btn-primary btn-full" id="popupSaveCheckin">保存</button>' +
@@ -224,13 +250,92 @@ const SettingsPage = (() => {
 
     App.showModal(html);
 
+    var modal = document.getElementById('modalContent');
+    var uploadArea = modal.querySelector('#popupUploadArea');
+    var fileInput = modal.querySelector('#popupFileInput');
+    var placeholder = modal.querySelector('#popupPlaceholder');
+    var previewWrap = modal.querySelector('#popupPreviewWrap');
+    var previewImg = modal.querySelector('#popupPreviewImg');
+    var removeBtn = modal.querySelector('#popupRemoveImg');
+    var rewardInput = modal.querySelector('#popupRewardInput');
+    var rewardForm = modal.querySelector('#rewardForm');
+    var toggleBtn = modal.querySelector('#toggleRewardBtn');
+    var deleteRewardBtn = modal.querySelector('#deleteRewardBtn');
+
+    // 切换奖励表单显示
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', function () {
+        var isHidden = rewardForm.style.display === 'none';
+        rewardForm.style.display = isHidden ? '' : 'none';
+        toggleBtn.textContent = isHidden ? '收起' : (isEditReward ? '编辑奖励' : '添加奖励');
+      });
+    }
+
+    // 图片上传
+    if (uploadArea) {
+      uploadArea.addEventListener('click', function () {
+        if (uploadArea.getAttribute('data-has-image') !== 'true') fileInput.click();
+      });
+    }
+    if (fileInput) {
+      fileInput.addEventListener('change', function () {
+        var file = fileInput.files[0];
+        if (!file) return;
+        ImageUtil.compress(file).then(function (base64) {
+          currentImage = base64;
+          previewImg.src = base64;
+          placeholder.style.display = 'none';
+          previewWrap.style.display = '';
+          removeBtn.style.display = '';
+          uploadArea.setAttribute('data-has-image', 'true');
+        });
+        fileInput.value = '';
+      });
+    }
+    if (removeBtn) {
+      removeBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        currentImage = null;
+        previewImg.src = '';
+        placeholder.style.display = '';
+        previewWrap.style.display = 'none';
+        removeBtn.style.display = 'none';
+        uploadArea.setAttribute('data-has-image', 'false');
+      });
+    }
+
+    // 删除奖励
+    if (deleteRewardBtn) {
+      deleteRewardBtn.addEventListener('click', function () {
+        if (!confirm('确定删除此日期的奖励？')) return;
+        Storage.deleteRewardRule(rule.id);
+        App.closeModal();
+        _renderCalendar();
+      });
+    }
+
+    // 保存
     document.getElementById('popupSaveCheckin').addEventListener('click', function () {
+      // 保存打卡
       var checkboxes = document.querySelectorAll('.popup-checkbox');
       var result = {};
       for (var i = 0; i < checkboxes.length; i++) {
         result[checkboxes[i].getAttribute('data-key')] = checkboxes[i].checked;
       }
       Storage.setCheckinFull(dateStr, result);
+
+      // 保存奖励（如果表单展开且有内容）
+      if (rewardForm.style.display !== 'none') {
+        var rewardText = rewardInput.value.trim();
+        if (rewardText) {
+          if (isEditReward) {
+            Storage.updateRewardRule(rule.id, { reward: rewardText, image: currentImage });
+          } else {
+            Storage.addRewardRule({ date: dateStr, reward: rewardText, image: currentImage });
+          }
+        }
+      }
+
       App.closeModal();
       _renderCalendar();
     });
