@@ -310,7 +310,17 @@
   padding: 0;
 }
 
+/* 阻止系统深色模式强制覆盖 */
+input, textarea, select, button, checkbox, radio {
+  color-scheme: inherit;
+}
+
+img, video {
+  color-scheme: inherit;
+}
+
 html {
+  color-scheme: dark light;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -322,6 +332,7 @@ body {
   font-family: var(--font-family);
   font-size: var(--text-body);
   line-height: 1.5;
+  color-scheme: light dark;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -540,6 +551,7 @@ img {
   border: 1px solid var(--color-hairline-dark);
   border-radius: var(--radius-sm);
   color: var(--color-on-dark);
+  color-scheme: inherit;
   font-size: var(--text-body);
   transition: border-color 0.2s ease, border-width 0.2s ease;
 }
